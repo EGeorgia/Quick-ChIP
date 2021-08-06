@@ -19,7 +19,7 @@ Emily Georgiades, Hughes Lab, July 2021.
 ```sample_name_R1.fastq.gz```  
 ```sample_name_R2.fastq.gz```
 
-#### 2. Edit flags in [jobscript](./jobscript-quick-chip.sh):  
+#### 4. Edit flags in [jobscript](./jobscript-quick-chip.sh):  
 ```bash quick-chip_withflags.sh -f sample_name -d fastq_dir -g genome -p public_dir```
 
 __-f__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify sample_name (e.g. clone_celltype_condition_rep).  
