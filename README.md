@@ -27,7 +27,7 @@ Single-end reads:
 ```bash quick-chip_withflags.sh -f sample_name -r paired -d fastq_dir -g genome -p public_dir```
 
 __-f__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify sample_name (e.g. clone_celltype_condition_rep).  
-__-r__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether reads are 'single' or 'paired'
+__-r__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether reads are 'single' or 'paired'.  
 __-d__&nbsp;&nbsp;&nbsp;&nbsp;Specify directory containing gun-zipped fastqs.  
 __-g__&nbsp;&nbsp;&nbsp;&nbsp;Specify genome build (mm39 or hg38).  
 __-p__&nbsp;&nbsp;&nbsp;&nbsp;Give path to public directory where bigwigs will be saved (excluding /datashare/).  
