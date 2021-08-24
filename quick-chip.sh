@@ -29,6 +29,7 @@ while getopts ":f:d:r:g:p:" arg; do
   esac
 done
 
+module load cutadapt
 module load ucsctools
 module load bowtie2
 module load sambamba
