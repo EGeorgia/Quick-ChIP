@@ -16,17 +16,26 @@ Emily Georgiades, Hughes Lab, July 2021.
 #### 2. Create a public directory where bigwigs will be copied to.
 
 #### 3. Ensure fastqs are gunzipped and named as follows:  
+Paired-end reads:   
 ```sample_name_R1.fastq.gz```  
 ```sample_name_R2.fastq.gz```
 
+Single-end reads:   
+```sample_name.fastq.gz```  
+
 #### 4. Edit flags in [jobscript](./jobscript-quick-chip.sh):  
-```bash quick-chip_withflags.sh -f sample_name -d fastq_dir -g genome -p public_dir```
+```bash quick-chip_withflags.sh -f sample_name -r paired -d fastq_dir -g genome -p public_dir```
 
 __-f__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify sample_name (e.g. clone_celltype_condition_rep).  
+__-r__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether reads are 'single' or 'paired'
 __-d__&nbsp;&nbsp;&nbsp;&nbsp;Specify directory containing gun-zipped fastqs.  
 __-g__&nbsp;&nbsp;&nbsp;&nbsp;Specify genome build (mm39 or hg38).  
 __-p__&nbsp;&nbsp;&nbsp;&nbsp;Give path to public directory where bigwigs will be saved (excluding /datashare/).  
 __-h__&nbsp;&nbsp;&nbsp;&nbsp;Display help.  
+
+#### :pencil:&nbsp;&nbsp;Notes:
+Preliminary step is to trim adapters, specifically for NEBNext® Ultra™ / NEBNext® Ultra™ II DNA Library Prep Kits for Illumina®.   
+Adapter sequence: GAT CGG AAG AGC ACA CGT
 
 *** 
 
