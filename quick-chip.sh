@@ -3,9 +3,9 @@
 # Specify parameters:
 usage() { echo -e "
 +-------------------------------------------------------+
-|                      QUICK-CHIP		                    |
-|          Fastq -> bigwigs for ChIP-seq data           |
-|		           Emily Georgiades, August 2021            |
+|                       QUICK-CHIP		        |
+|           Fastq -> bigwigs for ChIP-seq data          |
+|             Emily Georgiades, August 2021             |
 +-------------------------------------------------------+
 Notes: sample name should be consistent with fastq naming.\n
 Use following flags:" && grep " .)\ #" $0; exit 0; }
