@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --partition=batch
-#SBATCH --job-name=WT-ES
+#SBATCH --job-name=quick-chip
 #SBATCH --ntasks=1
-#SBATCH --mem=20G
+#SBATCH --mem=10G
+#SBATCH --time=00-12:00:00
 #SBATCH --output=%j_%x.out
 #SBATCH --error=%j_%x.err
-#SBATCH --mail-user=emily.georgiades@imm.ox.ac.uk
+#SBATCH --mail-user=email@address
 #SBATCH --mail-type=end,fail
 
 
-cd /stopgap/fgenomics/egeorgia/quick-chip/
+cd /working-dir/
 
-bash quick-chip_withflags.sh -f 2WT_E14_rad21_rep2 -d ../fastqs -g mm39 -p egeorgia/ChIP-seq/mm39/
-
+bash quick-chip.sh -f sample-name -d path/to/fastqs -g genome-build -p path/to/public-dir
