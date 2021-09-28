@@ -17,4 +17,5 @@ ENV/
 ._*
 
 # Snakemake
-.snakemake/*
+.snakemake
+data/*
