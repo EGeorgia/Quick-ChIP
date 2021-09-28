@@ -1,5 +1,0 @@
-Building DAG of jobs...
-MissingInputException in line 17 of /stopgap/fgenomics/egeorgia/quick-chip/Snakemake/Snakefile:
-Missing input files for rule make_sam:
-data/samples/outputBams/None_sorted_rmdup_R1.fastq.gz
-data/samples/outputBams/None_sorted_rmdup_R2.fastq.gz
