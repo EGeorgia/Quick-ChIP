@@ -1,0 +1,9 @@
+samples:
+  - HEKC11Capture 
+  - HEKC11Input
+
+bt2Prefix:
+  - hg38-genome
+
+genome:
+  - hg38

@@ -1,7 +1,6 @@
 ### .gitignore
 
 # Directories
-Snakemake/
 
 # Environments
 .env
@@ -16,3 +15,6 @@ ENV/
 # OS generated files #
 .DS_Store?
 ._*
+
+# Snakemake
+.snakemake/*

@@ -1,0 +1,47 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	all
+	2	bigwigging
+	2	make_sam
+	2	rmdup
+	2	sam2bam
+	2	sorting
+	11
+
+[Fri Aug  6 15:27:30 2021]
+rule make_sam:
+    input: data/samples/HEKC11Input_R1.fastq.gz, data/samples/HEKC11Input_R2.fastq.gz
+    output: data/HEKC11Input.sam
+    jobid: 10
+    wildcards: sample=HEKC11Input
+
+[Fri Aug  6 16:20:47 2021]
+Finished job 10.
+1 of 11 steps (9%) done
+
+[Fri Aug  6 16:20:47 2021]
+rule sam2bam:
+    input: data/HEKC11Input.sam
+    output: data/HEKC11Input.bam
+    jobid: 8
+    wildcards: sample=HEKC11Input
+
+[Fri Aug  6 16:20:48 2021]
+Error in rule sam2bam:
+    jobid: 8
+    output: data/HEKC11Input.bam
+    shell:
+        
+        samtools view -S -b data/HEKC11Input.sam > data/HEKC11Input.bam
+        
+        (exited with non-zero exit code)
+
+Removing output files of failed job sam2bam since they might be corrupted:
+data/HEKC11Input.bam
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /stopgap/fgenomics/egeorgia/quick-chip/Snakemake/.snakemake/log/2021-08-06T152730.485264.snakemake.log

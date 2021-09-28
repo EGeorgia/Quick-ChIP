@@ -1,0 +1,91 @@
+"""
+Snakemake workflow to process ChIP-seq data.
+Author: Emily Georgiades
+Hughes Group, University of Oxford
+August 2021
+"""
+
+configfile: "config.yaml"
+
+rule all:
+    #notes:
+        # expand the output of the final rule.
+    input:
+        expand("data/{sample}.bw",sample=config["samples"])
+
+
+rule make_sam:
+    #notes:
+        # samtools used to convert SAM->BAM
+    input:
+        READ1="data/samples/{sample}_R1.fastq.gz",
+        READ2="data/samples/{sample}_R2.fastq.gz"
+    params:
+        bt2=config["bt2Prefix"]
+    output:
+        "data/{sample}.sam"
+    conda:
+        "envs/mapping.yaml"
+    shell:
+        """
+        module load bowtie2
+        module load samtools
+        bowtie2 -x data/bowtie2/{params.bt2} -1 {input.READ1} -2 {input.READ2} -S {output}
+        """
+
+rule sam2bam:
+    #notes:
+    input:
+        "data/{sample}.sam"
+    output:
+        "data/{sample}.bam"
+    shell:
+        """
+        samtools view -S -b {input} > {output}
+        """
+
+rule sorting:
+    #notes:
+    input:
+        "data/{sample}.bam"
+    output:
+        "data/{sample}_sorted.bam"
+    shell:
+        """
+        module load sambamba
+        sambamba sort -o {output} {input}
+        """
+
+rule rmdup:
+    #notes:
+    input:
+        "data/{sample}_sorted.bam"
+    output:
+        "data/{sample}_sorted_rmdup.bam"
+    shell:
+        """
+        sambamba markdup -r {input} {output}
+        """
+
+rule indexing:
+    #notes:
+    input:
+        "data/{sample}_sorted_rmdup.bam"
+    output:
+        "data/{sample}.bai"
+    shell:
+        """
+        sambamba index {input} {output}
+        """
+
+rule bigwigging:
+      #notes:
+      input:
+          "data/{sample}_sorted_rmdup.bam"
+      output:
+          "data/{sample}.bw"
+      shell:
+          """
+          module load bedtools
+          bamCoverage -b {input} -o {output}
+          """
