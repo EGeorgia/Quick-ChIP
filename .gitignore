@@ -13,3 +13,6 @@ ENV/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# OS generated files #
+.DS_Store?
+._*
