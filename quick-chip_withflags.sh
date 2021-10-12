@@ -63,28 +63,32 @@ else
 fi
 
 # Preliminary step: adapter trimming
-# NEBNext® Ultra™ and NEBNext® Ultra™ II DNA Library Prep Kits for Illumina®
+# NEBNext® Ultra™ and NEBNext® Ultra™ II DNA Library Prep Kits for Illumina® (GATCGGAAGAGCACACGT)
+# Truseq Illumina, for ChIPmentation/ATAC (CTGTCTCTTATACACATCT)       
+
 # Step 1: Align single ot paired end reads using Bowtie2
 
 # For single-end reads:
 if [ $READS == "single" ]; then
-#   echo "Preliminary step: adapter trimming of single-ended reads"
-#   cutadapt -a GATCGGAAGAGCACACGT ${DATA}/${SAMPLE}.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_trimmed.fastq.gz -
-   echo " Step 1: Aligning single-end reads using Bowtie2..."
-   bowtie2 -x ${BT2DIR}/genome -U ${DATA}/${SAMPLE}.fastq.gz -S ${SAMPLE}.sam
+    echo "Preliminary step: adapter trimming of single-ended reads"
+    cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_trimmed.fastq.gz -
+
+echo " Step 1: Aligning single-end reads using Bowtie2..."
+
+bowtie2 -x ${BT2DIR}/genome -U ${DATA}/${SAMPLE}_trimmed.fastq.gz -S ${SAMPLE}.sam
 
 # For paired-end reads:
 elif [ $READS == "paired" ]; then
-#   echo "Preliminary step: adapter trimming of paired-ended reads"
-   # READ1
-#   cutadapt -a GATCGGAAGAGCACACGT ${DATA}/${SAMPLE}_R1.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz -
-#   echo "READ1 adapters trimmed."
-   # READ2
-#   cutadapt -a GATCGGAAGAGCACACGT ${DATA}/${SAMPLE}_R2.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R2_trimmed.fastq.gz -
-#   echo "READ2 adapters trimmed."
+   echo "Preliminary step: adapter trimming of paired-ended reads"
+    READ1
+   cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}_R1.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz -
+   echo "READ1 adapters trimmed."
+    READ2
+   cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}_R2.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R2_trimmed.fastq.gz -
+   echo "READ2 adapters trimmed."
 
    echo " Step 1: Aligning paired-end reads using Bowtie2..."
-   bowtie2 -x ${BT2DIR}/genome -1 ${DATA}/${SAMPLE}_R1.fastq.gz  -2 $DATA/${SAMPLE}_R2.fastq.gz -S ${SAMPLE}.sam
+   bowtie2 -x ${BT2DIR}/genome -1 ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz  -2 $DATA/${SAMPLE}_R2_trimmed.fastq.gz -S ${SAMPLE}.sam
 
 else
   echo "Paired or single-end reads must be specified."
