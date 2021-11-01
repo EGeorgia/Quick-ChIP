@@ -12,4 +12,4 @@
 
 cd /working-dir/
 
-bash quick-chip.sh -f sample-name -d path/to/fastqs -g genome-build -p path/to/public-dir
+bash quick-chip.sh -r paired/single -t adapter-trimming -f sample-name -d path/to/fastqs -g genome-build -p path/to/public-dir

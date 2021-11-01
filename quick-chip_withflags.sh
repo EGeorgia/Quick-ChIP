@@ -10,18 +10,20 @@ usage() { echo -e "
 Notes: sample name should be consistent with fastq naming.\n
 Use following flags:" && grep " .)\ #" $0; exit 0; }
 [ $# -eq 0 ] && usage
-while getopts ":f:d:r:g:p:" arg; do
+while getopts ":f:d:r:g:t:p:" arg; do
   case $arg in
     f) # Specify sample name (e.g. clone_celltype_condition_rep).
-	SAMPLE=${OPTARG};;
+    SAMPLE=${OPTARG};;
     r) # Specify whether reads are 'single' or 'paired'
-  READS=${OPTARG};;
+    READS=${OPTARG};;
     d) # Specify directory containing gun-zipped fastqs.
-	DATA=${OPTARG};;
-    g) # Specify genome build (mm39 or hg38).
-	GENOME=${OPTARG};;
+	  DATA=${OPTARG};;
+    g) # Specify genome build (mm39, mm39-R2 or hg38), include xxx (/xxx.1.bt2).
+	  GENOME=${OPTARG};;
+    t) # Should adapters be trimmed? (no/chip/chipment).
+    TRIM=${OPTARG};;
     p) # Give path to public directory where bigwigs will be saved (not including /datashare/).
-	public_dir=${OPTARG};;
+	  public_dir=${OPTARG};;
     h) # Display help.
       usage
       exit 0
@@ -55,41 +57,57 @@ echo ""
 
 # Determine which bt2 directory to use:
 if [ $GENOME == "mm39" ]; then
-   BT2DIR="/t1-data/databank/igenomes/Mus_musculus/UCSC/mm39/Sequence/Bowtie2Index"
+   BT2DIR="/t1-data/databank/igenomes/Mus_musculus/UCSC/mm39/Sequence/Bowtie2Index/genome"
+elif [ $GENOME == "mm39-R2" ]; then 
+   BT2DIR="/t1-data/project/fgenomics/egeorgia/Data/Bowtie2/Bowtie2_mm39-AL2R2chrX/mm39-AL2R2chrX"
 elif [ $GENOME == "hg38" ]; then
-   BT2DIR="/t1-data/databank/igenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index"
+   BT2DIR="/t1-data/databank/igenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/genome"
 else
   echo "Incorrect genome entered, choose either mm39 or hg38."
 fi
 
-# Preliminary step: adapter trimming
+# Option prelim step: adapter trimming
+if [ $TRIM == "chip" ]; then
+  ADAPTER="GATCGGAAGAGCACACGT"
+elif [ $TRIM == "chipment" ]; then
+  ADAPTER="CTGTCTCTTATACACATCT"
+elif [ $TRIM == "no" ]; then
+  echo "Skipping adapter trimming"
+else
+  echo "Specify either chip, chipment or none in -t"
+fi
+
 # NEBNext® Ultra™ and NEBNext® Ultra™ II DNA Library Prep Kits for Illumina® (GATCGGAAGAGCACACGT)
-# Truseq Illumina, for ChIPmentation/ATAC (CTGTCTCTTATACACATCT)       
+# Truseq Illumina, for ChIPmentation/ATAC (CTGTCTCTTATACACATCT)
 
 # Step 1: Align single ot paired end reads using Bowtie2
 
 # For single-end reads:
 if [ $READS == "single" ]; then
+  echo " Step 1: Processing single-end reads"
+  if [ $TRIM != "no" ]; then
     echo "Preliminary step: adapter trimming of single-ended reads"
-    cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_trimmed.fastq.gz -
-
-echo " Step 1: Aligning single-end reads using Bowtie2..."
-
-bowtie2 -x ${BT2DIR}/genome -U ${DATA}/${SAMPLE}_trimmed.fastq.gz -S ${SAMPLE}.sam
+    cutadapt -a ${ADAPTER} ${DATA}/${SAMPLE}.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_trimmed.fastq.gz -
+    echo "Aligning trimmed reads with bowtie2"
+    bowtie2 -x ${BT2DIR} -U ${DATA}/${SAMPLE}_trimmed.fastq.gz -S ${SAMPLE}.sam
+  else
+    echo "Proceeding without adapter trimming. Aligning reads with Bowtie2"
+    bowtie2 -x ${BT2DIR} -U ${DATA}/${SAMPLE}.fastq.gz -S ${SAMPLE}.sam
+  fi
 
 # For paired-end reads:
 elif [ $READS == "paired" ]; then
-   echo "Preliminary step: adapter trimming of paired-ended reads"
-    READ1
-   cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}_R1.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz -
-   echo "READ1 adapters trimmed."
-    READ2
-   cutadapt -a CTGTCTCTTATACACATCT ${DATA}/${SAMPLE}_R2.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R2_trimmed.fastq.gz -
-   echo "READ2 adapters trimmed."
-
-   echo " Step 1: Aligning paired-end reads using Bowtie2..."
-   bowtie2 -x ${BT2DIR}/genome -1 ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz  -2 $DATA/${SAMPLE}_R2_trimmed.fastq.gz -S ${SAMPLE}.sam
-
+  echo " Step 1: Processing paired-end reads"
+  if [ $TRIM != "no" ]; then
+    echo "Preliminary step: adapter trimming of paired-ended reads"
+    cutadapt -a ${ADAPTER} ${DATA}/${SAMPLE}_R1.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R1_trimmed.fastq.gz -
+    echo "READ1 adapters trimmed."
+    cutadapt -a ${ADAPTER} ${DATA}/${SAMPLE}_R2.fastq.gz | cutadapt -m 18 -o ${DATA}/${SAMPLE}_R2_trimmed.fastq.gz -
+    echo "READ2 adapters trimmed."
+  else
+    echo "Proceeding without adapter trimming. Aligning paired-end reads using Bowtie2"
+    bowtie2 -x ${BT2DIR} -1 ${DATA}/${SAMPLE}_R1.fastq.gz  -2 $DATA/${SAMPLE}_R2.fastq.gz -S ${SAMPLE}.sam
+  fi
 else
   echo "Paired or single-end reads must be specified."
 fi
