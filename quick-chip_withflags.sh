@@ -114,23 +114,38 @@ fi
 
 # Step 2: Sam to Bam conversion
 echo " Step 2: Sam to Bam conversion"
-samtools view -S -b ${SAMPLE}.sam > ${SAMPLE}.bam
+if ! samtools view -S -b ${SAMPLE}.sam > ${SAMPLE}.bam ; then
+    echo "samtools view returned an error"
+    exit 1
+fi
 
 # Step 3: sort bamfile by genomic coordinate
 echo " Step 3: Sorting bamfile"
-sambamba sort -o ${SAMPLE}_sorted.bam ${SAMPLE}.bam
+if ! sambamba sort -o ${SAMPLE}_sorted.bam ${SAMPLE}.bam ; then
+    echo "sambamba sort returned an error"
+    exit 1
+fi
 
 # Step 4: remove duplicates
 echo " Step 4: Removing duplicates"
-sambamba markdup -r ${SAMPLE}_sorted.bam ${SAMPLE}_sorted_rmdup.bam
+if ! sambamba markdup -r ${SAMPLE}_sorted.bam ${SAMPLE}_sorted_rmdup.bam ; then
+   echo "sambamba markdup returned an error"
+   exit 1
+fi
 
 # Step 5: index bam
 echo " Step 5: Indexing bamfile"
-sambamba index ${SAMPLE}_sorted_rmdup.bam ${SAMPLE}.bai
+if ! sambamba index ${SAMPLE}_sorted_rmdup.bam ${SAMPLE}.bai ; then
+    echo "sambamba index returned an error"
+    exit 1
+fi
 
 # Step 6: creating a bigwig using DeepTools
 echo " Step 6: Creating bigwig"
-bamCoverage -b ${SAMPLE}_sorted_rmdup.bam -o ${SAMPLE}.bw
+if ! bamCoverage -b ${SAMPLE}_sorted_rmdup.bam -o ${SAMPLE}.bw ; then
+    echo "bamcoverage returned an error"
+    exit 1
+fi
 
 # Step 7: copy bigwigs to datashare folder to view on ucsc genome browsed
 cp ${SAMPLE}.bw /datashare/${public_dir}
