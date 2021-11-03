@@ -135,7 +135,7 @@ fi
 
 # Step 5: index bam
 echo " Step 5: Indexing bamfile"
-if ! sambamba index ${SAMPLE}_sorted_rmdup.bam ${SAMPLE}.bai ; then
+if ! sambamba index ${SAMPLE}_sorted_rmdup.bam ${SAMPLE}_sorted_rmdup.bam.bai ; then
     echo "sambamba index returned an error"
     exit 1
 fi
