@@ -29,7 +29,8 @@ Single-end reads:
 __-f__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify sample_name (e.g. clone_celltype_condition_rep).  
 __-r__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether reads are 'single' or 'paired'.  
 __-d__&nbsp;&nbsp;&nbsp;&nbsp;Specify directory containing gun-zipped fastqs.  
-__-g__&nbsp;&nbsp;&nbsp;&nbsp;Specify genome build (mm39 or hg38).  
+__-g__&nbsp;&nbsp;&nbsp;&nbsp;Specify genome build (mm39, mm39-R2, mm39-R1R2 or hg38).
+__-t__&nbsp;&nbsp;&nbsp;&nbsp;Specify if/which adapters should be trimmed? (no/chip/chipment).  
 __-p__&nbsp;&nbsp;&nbsp;&nbsp;Give path to public directory where bigwigs will be saved (excluding /datashare/).  
 __-h__&nbsp;&nbsp;&nbsp;&nbsp;Display help.  
 
