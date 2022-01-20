@@ -18,7 +18,7 @@ while getopts ":f:d:r:g:t:p:" arg; do
     READS=${OPTARG};;
     d) # Specify directory containing gun-zipped fastqs.
 	  DATA=${OPTARG};;
-    g) # Specify genome build (mm39, mm39-R2 or hg38), include xxx (/xxx.1.bt2).
+    g) # Specify genome build (mm39, mm39-R2, mm39-R1R2 or hg38), include xxx (/xxx.1.bt2).
 	  GENOME=${OPTARG};;
     t) # Should adapters be trimmed? (no/chip/chipment).
     TRIM=${OPTARG};;
@@ -60,6 +60,8 @@ if [ $GENOME == "mm39" ]; then
    BT2DIR="/t1-data/databank/igenomes/Mus_musculus/UCSC/mm39/Sequence/Bowtie2Index/genome"
 elif [ $GENOME == "mm39-R2" ]; then 
    BT2DIR="/t1-data/project/fgenomics/egeorgia/Data/Bowtie2/Bowtie2_mm39-AL2R2chrX/mm39-AL2R2chrX"
+elif [ $GENOME == "mm39-R1R2" ]; then
+   BT2DIR="/t1-data/project/fgenomics/egeorgia/Data/Bowtie2/Bowtie2_mm39-R1R2chrX/mm39-R1R2chrX"
 elif [ $GENOME == "hg38" ]; then
    BT2DIR="/t1-data/databank/igenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/genome"
 else
