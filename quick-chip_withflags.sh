@@ -40,7 +40,6 @@ module load ucsctools
 module load bowtie2
 module load sambamba
 module load samtools
-module load deeptools
 
 start="$(date)"
 
@@ -143,6 +142,8 @@ if ! sambamba index ${SAMPLE}_sorted_rmdup.bam ${SAMPLE}_sorted_rmdup.bam.bai ; 
 fi
 
 # Step 6: creating a bigwig using DeepTools
+module unload python-base
+module load deeptools
 echo " Step 6: Creating bigwig"
 if ! bamCoverage -b ${SAMPLE}_sorted_rmdup.bam -o ${SAMPLE}.bw ; then
     echo "bamcoverage returned an error"
