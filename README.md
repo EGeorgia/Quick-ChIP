@@ -12,6 +12,7 @@ Emily Georgiades, Hughes Lab, July 2021.
 #### 1. Create a directory containing:  
    * [yy-mm-dd-experiment-setup.md](./yy-mm-dd-experiment-setup.md): file containing info on experimental design and set-up
    * [jobscript-quick-chip.sh](./jobscript-quick-chip.sh)
+   * [paths_to_fastqs.txt](./paths_to_fastqs.txt): first column specify sample_name (e.g. clone_celltype_condition_rep). Second columns path to directory containing gun-zipped fastqs.
 
 #### 2. Create a public directory where bigwigs will be copied to.
 
@@ -24,11 +25,9 @@ Single-end reads:
 ```sample_name.fastq.gz```  
 
 #### 4. Edit flags in [jobscript](./jobscript-quick-chip.sh):  
-```bash quick-chip_withflags.sh -f sample_name -r paired -d fastq_dir -g genome -p public_dir```
+```bash quick-chip_withflags.sh -r paired -g genome -t trimming -p public_dir```
 
-__-f__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify sample_name (e.g. clone_celltype_condition_rep).  
 __-r__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify whether reads are 'single' or 'paired'.  
-__-d__&nbsp;&nbsp;&nbsp;&nbsp;Specify directory containing gun-zipped fastqs.  
 __-g__&nbsp;&nbsp;&nbsp;&nbsp;Specify genome build (mm39, mm39-R2, mm39-R1R2 or hg38).  
 __-t__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specify if/which adapters should be trimmed? (no/chip/chipment).  
 __-p__&nbsp;&nbsp;&nbsp;&nbsp;Give path to public directory where bigwigs will be saved (excluding /datashare/).  
