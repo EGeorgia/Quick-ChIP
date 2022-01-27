@@ -1,0 +1,3 @@
+clone_celltype_condition_rep1	/path/to/gunzipped/fastqs/
+clone_celltype_condition_rep2	/path/to/gunzipped/fastqs/
+clone_celltype_condition_rep3	/path/to/gunzipped/fastqs/
