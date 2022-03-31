@@ -24,12 +24,9 @@ rule make_sam:
         bt2=config["bt2Prefix"]
     output:
         "data/{sample}.sam"
-    conda:
-        "envs/mapping.yaml"
     shell:
         """
         module load bowtie2
-        module load samtools
         bowtie2 -x data/bowtie2/{params.bt2} -1 {input.READ1} -2 {input.READ2} -S {output}
         """
 
@@ -41,6 +38,7 @@ rule sam2bam:
         "data/{sample}.bam"
     shell:
         """
+        module load samtools
         samtools view -S -b {input} > {output}
         """
 
@@ -64,6 +62,7 @@ rule rmdup:
         "data/{sample}_sorted_rmdup.bam"
     shell:
         """
+        module load sambamba
         sambamba markdup -r {input} {output}
         """
 
@@ -75,17 +74,19 @@ rule indexing:
         "data/{sample}.bai"
     shell:
         """
+        module load sambamba
         sambamba index {input} {output}
         """
 
 rule bigwigging:
-      #notes:
-      input:
-          "data/{sample}_sorted_rmdup.bam"
-      output:
+    #notes:
+    input:
+        "data/{sample}_sorted_rmdup.bam"
+    output:
           "data/{sample}.bw"
-      shell:
-          """
-          module load bedtools
-          bamCoverage -b {input} -o {output}
-          """
+    shell:
+        """
+        module unload python-base
+        module load deeptools
+        bamCoverage -b {input} -o {output}
+        """

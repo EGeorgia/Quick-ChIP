@@ -1,9 +1,9 @@
 samples:
-  - HEKC11Capture 
-  - HEKC11Input
+  - 0hrs_mES-E14_RAD21-FLAG_rep1
+  - 0hrs_mES-E14_RAD21-FLAG_rep2
 
 bt2Prefix:
-  - hg38-genome
+  - genome
 
 genome:
   - hg38

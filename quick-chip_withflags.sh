@@ -27,15 +27,6 @@ while getopts ":f:d:r:g:t:p:" arg; do
   esac
 done
 
-# Unload all modules for a clean start
-module purge
-
-# Load required modules
-module load cutadapt
-module load ucsctools
-module load bowtie2
-module load sambamba
-module load samtools
 
 INPUT_FASTQS="./paths_to_fastqs.txt"
 
@@ -81,6 +72,16 @@ for file in ${INPUT_FASTQS}
 do
     while IFS=$'\t' read -r sampleName DIR
     do 
+        # Unload all modules for a clean start (would be better in snakemake, this is a workaround)
+        module purge
+
+        # Load required modules
+        module load cutadapt
+        module load ucsctools
+        module load bowtie2
+        module load sambamba
+        module load samtools
+        
         SAMPLE="${sampleName}"
         DATA="${DIR}"
         echo "Processing sample: ${SAMPLE}"
@@ -154,8 +155,8 @@ do
         # Step 6: creating a bigwig using DeepTools
         module unload python-base
         module load deeptools
-        echo " Step 6: Creating bigwig"
-        if ! bamCoverage -b ${SAMPLE}_sorted_rmdup.bam -o ${SAMPLE}.bw ; then
+        echo " Step 6: Creating bigwig in correct format for lanceotron"
+        if ! bamCoverage -b ${SAMPLE}_sorted_rmdup.bam -o ${SAMPLE}_lanceotron.bw --extendReads -bs 1 --normalizeUsing RPKM; then
             echo "bamcoverage returned an error"
             exit 1
         fi
@@ -168,10 +169,6 @@ do
         echo ""
     done
 done < "${INPUT_FASTQS}"
-  else
-    echo "Error! paths_to_fastqs.txt file incorrectly formatted"
-  fi
-done
 
 end="$(date)"
 echo ""
