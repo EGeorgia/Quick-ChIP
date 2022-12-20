@@ -1,5 +1,5 @@
 # :hourglass_flowing_sand: Quick-ChIP
-#### Quick and easy analysis of ChIP-seq data on stopgap for visualisation using the [UCSC genome browser.](https://genome.ucsc.edu/)
+#### Quick and easy analysis of ChIP-seq data for visualisation using the [UCSC genome browser.](https://genome.ucsc.edu/)
 
 Emily Georgiades, Hughes Lab, July 2021.  
   
