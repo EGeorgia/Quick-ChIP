@@ -44,13 +44,13 @@ echo ""
 
 # Determine which bt2 directory to use:
 if [ $GENOME == "mm39" ]; then
-   BT2DIR="/t1-data/databank/igenomes/Mus_musculus/UCSC/mm39/Sequence/Bowtie2Index/genome"
+   BT2DIR="<path>/genome"
 elif [ $GENOME == "mm39-R2" ]; then 
-   BT2DIR="/t1-data/project/fgenomics/egeorgia/Data/Bowtie2/Bowtie2_mm39-AL2R2chrX/mm39-AL2R2chrX"
+   BT2DIR="<path>/mm39-AL2R2chrX"
 elif [ $GENOME == "mm39-R1R2" ]; then
-   BT2DIR="/t1-data/project/fgenomics/egeorgia/Data/Bowtie2/Bowtie2_mm39-R1R2chrX/mm39-R1R2chrX"
+   BT2DIR="<path>/mm39-R1R2chrX"
 elif [ $GENOME == "hg38" ]; then
-   BT2DIR="/t1-data/databank/igenomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/genome"
+   BT2DIR="<path>/genome"
 else
   echo "Incorrect genome entered, choose either mm39 or hg38."
 fi
@@ -165,7 +165,7 @@ do
         cp ${SAMPLE}.bw /datashare/${public_dir}
         echo ""
         echo "Copy + paste link into UCSC genome browser:"
-        echo "http://sara.molbiol.ox.ac.uk/public/${public_dir}/${SAMPLE}.bw"
+        echo "http://<path>/public/${public_dir}/${SAMPLE}.bw"
         echo ""
     done
 done < "${INPUT_FASTQS}"
